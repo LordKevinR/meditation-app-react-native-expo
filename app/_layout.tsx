@@ -1,37 +1,48 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+// import { Slot } from "expo-router";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+// const RootLayout = () => {
+//   return <Slot />;
+// };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+// export default RootLayout;
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+import TimerProvider from "@/context/TimerContext";
+import { Stack } from "expo-router";
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
+const RootLayout = () => {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+    <TimerProvider>
+      <Stack
+        screenOptions={{
+          headerShown: false, // Ocultar el header en todas las páginas
+        }}
+      >
+        <Stack.Screen
+          name="(tabs)"
+          options={{ headerShown: false, animation: "ios" }}
+        />
+        <Stack.Screen
+          name="index"
+          options={{ headerShown: false, animation: "ios" }}
+        />
+        <Stack.Screen
+          name="meditation/[id]"
+          options={{
+            headerShown: false,
+            animation: "ios",
+          }}
+        />
+        <Stack.Screen
+          name="(modal)/adjust-meditation-duration"
+          options={{
+            headerShown: false,
+            presentation: "modal",
+            animation: "slide_from_bottom",
+          }}
+        />
       </Stack>
-    </ThemeProvider>
+    </TimerProvider>
   );
-}
+};
+
+export default RootLayout;
